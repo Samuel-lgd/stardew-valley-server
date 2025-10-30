@@ -49,7 +49,7 @@ namespace JunimoServer.Services.CabinManager
         public readonly PersistentOptions options;
         private readonly RoleService roleService;
 
-        private const int minEmptyCabins = 1;
+        private const int minEmptyCabins = 2;
 
         private readonly HashSet<long> farmersInFarmhouse = new HashSet<long>();
 
