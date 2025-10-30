@@ -38,10 +38,10 @@ namespace JunimoServer.Services.GameCreator
             {
                 WhichFarm = 0,
                 UseSeparateWallets = false,
-                StartingCabins = 1,
+                StartingCabins = 2,
                 CatPerson = false,
-                FarmName = "Test",
-                MaxPlayers = 10,
+                FarmName = "Ferme de l'amour",
+                MaxPlayers = 3,
                 CabinStrategy = 0,
             };
 
@@ -82,7 +82,7 @@ namespace JunimoServer.Services.GameCreator
 
             Game1.player.team.useSeparateWallets.Value = config.UseSeparateWallets;
             // TODO: Should be fine as hardcoded value, cabins are supposed to be built on the fly when players join
-            Game1.startingCabins = 1;
+            Game1.startingCabins = 2;
 
             // Ultimate Farm CP compat
             var isUltimateFarmModLoaded = _helper.ModRegistry.GetAll().Any(mod => mod.Manifest.Name == "Ultimate Farm CP");
