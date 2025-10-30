@@ -90,7 +90,7 @@ sudo dnf install -y git
 Clonez le dépôt du serveur dans le répertoire de l'utilisateur `ec2-user`.
 ```bash
 cd /home/ec2-user
-git clone https://github.com/stardew-valley-dedicated-server/server.git
+git clone https://github.com/Samuel-lgd/stardew-valley-server.git server
 cd server
 ```
 
@@ -98,25 +98,23 @@ cd server
 Copiez le fichier d'exemple `.env.example` et modifiez-le pour y mettre vos informations.
 ```bash
 cp .env.example .env
-nano .env
+nano .env # Modifiez au moins VNC_PASSWORD
 ```
-Modifiez les valeurs suivantes dans l'éditeur `nano` :
-*   `STEAM_USER`: Votre nom d'utilisateur Steam.
-*   `STEAM_PASS`: Votre mot de passe Steam.
-*   `VNC_PASSWORD`: Un mot de passe pour l'interface web (au moins 6 caractères).
 
-**Note sur Steam Guard** : Laissez `STEAM_GUARD_CODE` vide au premier lancement. Si la console Docker vous demande un code, vous devrez arrêter le serveur, éditer le fichier `.env` pour ajouter le code, puis relancer.
+### c. S'authentifier au registre Docker (si nécessaire)
+Si votre image Docker est privée (par exemple, sur GitHub Container Registry), vous devez vous connecter pour pouvoir la télécharger.
+```bash
+# Utilisez votre nom d'utilisateur et un PAT (Personal Access Token) comme mot de passe
+docker login ghcr.io -u <VOTRE_NOM_UTILISATEUR_GITHUB>
+```
 
-Sauvegardez (`Ctrl+O`) et quittez `nano` (`Ctrl+X`).
-
-### c. Lancer le serveur
-Utilisez Docker Compose pour télécharger l'image et démarrer le serveur en arrière-plan.
+### d. Lancer le serveur
+Une fois la configuration terminée, lancez le serveur avec Docker Compose.
 ```bash
 docker compose up -d
 ```
-Le premier démarrage peut être long, car Docker télécharge l'image du serveur et le serveur lui-même télécharge les fichiers du jeu Stardew Valley via Steam.
 
-Pour suivre les logs :
+Le serveur va télécharger l'image et démarrer en arrière-plan. Pour suivre les logs :
 ```bash
 docker compose logs -f
 ```
@@ -173,14 +171,34 @@ sudo systemctl enable --now junimoserver
 ```
 
 ### e. Mettre à jour le serveur
-Pour mettre à jour JunimoServer avec la dernière version :
-```bash
-cd /home/ec2-user/server
-git pull # Met à jour le code source (si nécessaire)
-docker compose pull # Télécharge la dernière image Docker
-docker compose up -d --force-recreate # Redémarre le serveur avec la nouvelle image
-docker image prune -f # Supprime les anciennes images inutilisées
-```
+Pour mettre à jour le serveur avec les dernières modifications que vous avez poussées sur GitHub et sur le registre Docker :
+
+1.  **Connectez-vous à votre instance EC2 en SSH.**
+
+2.  **Naviguez jusqu'au répertoire du serveur.**
+    ```bash
+    cd /home/ec2-user/server
+    ```
+
+3.  **Récupérez les dernières modifications du code source** (si vous avez modifié des fichiers de configuration comme `docker-compose.yml`).
+    ```bash
+    git pull
+    ```
+
+4.  **Téléchargez la dernière version de l'image Docker** depuis le registre.
+    ```bash
+    docker compose pull
+    ```
+
+5.  **Redémarrez le serveur** pour qu'il utilise la nouvelle image.
+    ```bash
+    docker compose up -d --force-recreate
+    ```
+
+6.  **(Optionnel) Nettoyez les anciennes images** pour libérer de l'espace disque.
+    ```bash
+    docker image prune -f
+    ```
 
 ### f. Sauvegardes
 Les données du jeu sont stockées dans des volumes Docker sur le disque de l'instance. La méthode la plus simple et la plus sûre pour les sauvegarder est de créer des **snapshots EBS** de votre volume via la console AWS. Vous pouvez automatiser cela avec **AWS Backup**.
@@ -190,12 +208,9 @@ Les données du jeu sont stockées dans des volumes Docker sur le disque de l'in
 *   **Impossible de se connecter ?**
     *   Vérifiez que votre groupe de sécurité autorise bien le trafic sur les ports UDP 24643 et TCP 8090.
     *   Assurez-vous que l'adresse IP que vous utilisez est bien l'IP publique de l'instance.
-*   **Le serveur ne démarre pas (logs Docker) ?**
-    *   Vérifiez vos identifiants Steam dans le fichier `.env`.
-    *   Si Steam Guard est activé, remplissez le champ `STEAM_GUARD_CODE`.
-*   **Optimisation des coûts**
-    *   Pensez à **arrêter** votre instance EC2 lorsque vous ne l'utilisez pas pour éviter les frais.
-    *   Utilisez les alarmes **CloudWatch** pour surveiller l'utilisation du CPU et être alerté en cas de surcharge.
-    *   Envisagez une **IP Élastique** (Elastic IP) si vous arrêtez/redémarrez souvent l'instance, pour garder une adresse IP fixe (gratuite tant qu'elle est attachée à une instance en cours d'exécution).
+    *   Vérifiez les logs du conteneur (`docker compose logs`) pour déceler d'éventuelles erreurs au démarrage.
+
+*   **Erreur `permission denied` avec Docker ?**
+    *   Assurez-vous d'avoir bien exécuté `sudo usermod -aG docker ec2-user` et `newgrp docker` ou de vous être déconnecté/reconnecté.
 
 Ce guide devrait vous permettre de mettre en place votre serveur Stardew Valley de manière fonctionnelle et économique. Bon jeu !

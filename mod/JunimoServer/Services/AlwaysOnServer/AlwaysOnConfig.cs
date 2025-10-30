@@ -7,9 +7,9 @@ namespace JunimoServer.Services.AlwaysOn
         public SButton HotKeyToggleAutoMode { get; set; } = SButton.F9;
         public SButton HotKeyToggleVisibility { get; set; } = SButton.F10;
 
-        public string PetName { get; set; } = "Apples";
+        public string PetName { get; set; } = "Mushu";
         public bool FarmCaveChoiceIsMushrooms { get; set; } = true;
-        public bool IsCommunityCenterRun { get; set; } = true;
+        public bool IsCommunityCenterRun { get; set; } = false;
 
         public bool LockPlayerChests { get; set; } = true;
 

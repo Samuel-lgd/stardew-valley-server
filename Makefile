@@ -10,8 +10,9 @@ BUILD_PATH=./.output/build
 DEST_PATH=./.output/mods/JunimoServer
 
 # TODO: Random project meta data, should it be defined more centrally? (.env vs .props files problem)
-IMAGE_REGISTRY=sdvd
-IMAGE_NAME=server
+IMAGE_REGISTRY=ghcr.io/samuel-lgd
+IMAGE_NAME=stardew-valley-server
+IMAGE_VERSION ?= dev
 
 # Build and start docker containers
 run: build-mod build-image
@@ -19,7 +20,7 @@ run: build-mod build-image
 
 # Build mod and docker image
 build-image:
-	docker build --platform=amd64 -t $(IMAGE_REGISTRY)/$(IMAGE_NAME):$(IMAGE_VERSION) -t $(IMAGE_REGISTRY)/$(IMAGE_NAME):latest -f docker/Dockerfile .
+	docker build --platform=linux/amd64 -t $(IMAGE_REGISTRY)/$(IMAGE_NAME):$(IMAGE_VERSION) -t $(IMAGE_REGISTRY)/$(IMAGE_NAME):latest -f docker/Dockerfile .
 
 # Build mod
 build-mod: $(shell find $(SRC_PATH)/**/*.cs -type f) $(SRC_PATH)/JunimoServer.csproj $(SRC_PATH)/manifest.json
