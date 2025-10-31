@@ -1,7 +1,7 @@
 services:
     stardew:
-        image: sdvd/server:latest
-        container_name: sdvd-server
+        image: ghcr.io/samuel-lgd/stardew-valley-server:latest
+        container_name: stardew-valley-server
         ports:
             - ${GAME_PORT}:24642/udp
             - ${VNC_PORT}:5800

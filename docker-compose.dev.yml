@@ -1,7 +1,7 @@
 # NOT IN USE/READY
 services:
     stardew:
-        image: sdvd/server:latest
+        image: ghcr.io/samuel-lgd/stardew-valley-server:latest
         build:
             context: .
             dockerfile: ./docker/Dockerfile
@@ -9,7 +9,7 @@ services:
                 STEAM_USER: ${STEAM_USER}
                 STEAM_PASS: ${STEAM_PASS}
                 STEAM_GUARD_CODE: "${STEAM_GUARD_CODE}"
-        container_name: stardew-dedicated-server
+        container_name: stardew-valley-server-dev
         ports:
             - ${GAME_PORT}:24642/udp
             - ${VNC_PORT}:5800
@@ -31,7 +31,7 @@ services:
         build:
             context: ./../web
             dockerfile: ./../web/Dockerfile
-        container_name: stardew-dedicated-web
+        container_name: stardew-valley-web-dev
         ports:
             - ${WEB_UI_PORT}:3000
             - ${WEB_HMR_PORT}:24678

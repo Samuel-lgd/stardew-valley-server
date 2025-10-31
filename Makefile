@@ -12,7 +12,7 @@ DEST_PATH=./.output/mods/JunimoServer
 # TODO: Random project meta data, should it be defined more centrally? (.env vs .props files problem)
 IMAGE_REGISTRY=ghcr.io/samuel-lgd
 IMAGE_NAME=stardew-valley-server
-IMAGE_VERSION ?= dev
+IMAGE_VERSION ?= latest
 
 # Build and start docker containers
 run: build-mod build-image

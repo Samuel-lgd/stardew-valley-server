@@ -6,8 +6,9 @@ Ce guide explique comment configurer votre environnement de développement local
 
 Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 *   **Git** : Pour la gestion du code source.
-*   **Docker Desktop** : Pour construire et exécuter des conteneurs Docker. Assurez-vous qu'il est en cours d'exécution.
+*   **Docker Desktop** : Pour construire et exécuter des conteneurs Docker. *Assurez-vous qu'il est en cours d'exécution*.
 *   **.NET SDK** : Version 6.0 ou supérieure, pour construire le mod C#.
+*  **SMAPI** : Pour le build et les tests locaux du mod dans Stardew Valley.
 *   **Make** : (Optionnel mais recommandé) Pour utiliser les commandes simplifiées du `Makefile`. Si vous êtes sur Windows, vous pouvez l'installer avec [Chocolatey](https://chocolatey.org/install) (`choco install make`).
 
 ## 2. Configuration Initiale
@@ -47,6 +48,7 @@ Pour tester vos modifications localement, utilisez les commandes suivantes :
 1.  **Construire le mod et l'image Docker** :
     Cette commande compile le code C#, copie les fichiers nécessaires et construit l'image Docker.
     ```bash
+    make build-mod
     make build-image
     ```
     *(Si vous n'avez pas `make`, exécutez la commande `docker build...` directement depuis le `Makefile`)*.
