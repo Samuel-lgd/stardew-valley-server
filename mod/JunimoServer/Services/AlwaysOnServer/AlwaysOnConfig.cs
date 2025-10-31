@@ -9,7 +9,7 @@ namespace JunimoServer.Services.AlwaysOn
 
         public string PetName { get; set; } = "Mushu";
         public bool FarmCaveChoiceIsMushrooms { get; set; } = true;
-        public bool IsCommunityCenterRun { get; set; } = false;
+        public bool IsCommunityCenterRun { get; set; } = true;
 
         public bool LockPlayerChests { get; set; } = true;
 
